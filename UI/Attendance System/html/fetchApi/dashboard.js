@@ -37,7 +37,7 @@ $(document).on('click', '#go', function() {
                     .then(response => {
                       console.log(response)
                       if(response){
-                          $('#csv').attr('href', `https://teejohn247.github.io/Employee-Mangement-System/public${response}`)
+                          $('#csv').attr('href', `https://ridwanokanlawon.github.io/public${response}`)
                       }
                       else{
                           alert('error')

@@ -69,7 +69,7 @@ $(document).on('click', '#go', function() {
         // $( "#loading_filter" ).show();
         const token = JSON.parse(localStorage.getItem('adminToken'));
                 fetch(
-                 `http://localhost:5000/api/v1/csv`, {
+                `https://ems-employee-management-system.herokuapp.com/api/v1/csv`, {
                   method: 'GET',
                   headers: {
                     "Content-Type": 'application/json', 
@@ -80,7 +80,7 @@ $(document).on('click', '#go', function() {
                     .then(response => {
                       console.log(response)
                       if(response){
-                          $('#csv').attr('href', response)
+                         $('#csv').attr('href', `https://ridwanokanlawon.github.io/public${response}`)
                       }
                       else{
                           alert('error')
