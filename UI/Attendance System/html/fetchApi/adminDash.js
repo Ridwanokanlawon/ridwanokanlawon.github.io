@@ -18,6 +18,7 @@ $(document).on('ready', function() {
               .then(data => {
               console.log(data)
               localStorage.setItem('total_admins', `${data.length}`)
+              localStorage.setItem('all_admins',JSON.stringify(data));
                   
                 //   $('#adm').html(`${data.length}`)
                 //   $('#pagination').twbsPagination('destroy');
@@ -40,6 +41,7 @@ $(document).on('ready', function() {
                console.log(data)
                    
               localStorage.setItem('total_users', `${data.length}`)
+               localStorage.setItem('all_users',JSON.stringify(data));
                   
                })
                
@@ -78,9 +80,11 @@ $(document).on('click', '#go', function() {
                 })
                     .then(res => res.json())
                     .then(response => {
+                        console.log(response)
                       console.log(response)
                       if(response){
-                         $('#csv').attr('href', `https://ridwanokanlawon.github.io/public${response}`)
+                            downloadCsv(localStorage.getItem("all_users"))
+                        // $('#csv').attr('href', `https://ridwanokanlawon.github.io/public${response}`)
                       }
                       else{
                           alert('error')
@@ -91,6 +95,63 @@ $(document).on('click', '#go', function() {
                     .catch(error => console.log(error.message));
         // e.preventDefault();
     }
+    function downloadCsv(data){
+          console.log(data)
+                  var json = $.parseJSON(data);
+                  console.log(json)
+
+            var csv = JSON2CSV(json);
+            var downloadLink = document.createElement("a");
+            var blob = new Blob(["\ufeff", csv]);
+            var url = URL.createObjectURL(blob);
+            downloadLink.href = url;
+            downloadLink.download = "data.csv";
+
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+    }
+    function JSON2CSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
+    var line = '';
+
+    if ($("#labels").is(':checked')) {
+        var head = array[0];
+        if ($("#quote").is(':checked')) {
+            for (var index in array[0]) {
+                var value = index + "";
+                line += '"' + value.replace(/"/g, '""') + '",';
+            }
+        } else {
+            for (var index in array[0]) {
+                line += index + ',';
+            }
+        }
+
+        line = line.slice(0, -1);
+        str += line + '\r\n';
+    }
+
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+
+        if ($("#quote").is(':checked')) {
+            for (var index in array[i]) {
+                var value = array[i][index] + "";
+                line += '"' + value.replace(/"/g, '""') + '",';
+            }
+        } else {
+            for (var index in array[i]) {
+                line += array[i][index] + ',';
+            }
+        }
+
+        line = line.slice(0, -1);
+        str += line + '\r\n';
+    }
+    return str;
+}
 
 const is_loggedin = localStorage.getItem('is_loggedin');
 const profile_picture = document.querySelector('.user-profile');
